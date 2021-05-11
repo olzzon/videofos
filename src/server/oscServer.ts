@@ -2,7 +2,13 @@
 import osc from 'osc'
 import { logger } from './utils/logger'
 
+import { VMix } from './devices/vmixAPI'
+
 export const OscConnection = (port: number) => {
+    const vmix = new VMix()
+    vmix.connect({ host: '192.168.0.12', port: 8088 })
+
+
     const oscConnection = new osc.UDPPort({
         localAddress: '0.0.0.0',
         localPort: port,
@@ -11,15 +17,15 @@ export const OscConnection = (port: number) => {
         .on('ready', () => {
             logger.info('Listening for Automation via OSC over UDP.', {})
         })
+        .on('connected', () => {
+            logger.info('Playout Gateway connected')
+        })
         .on(
             'message',
             (message: any, timetag: number | undefined, info: any) => {
-                logger.info(
-                    'RECIEVED SOFIE MESSAGE :' +
-                        message.address +
-                        message.args[0],
-                    {}
-                )
+                let content = JSON.parse(message.args[0])
+                console.log('---------------Message : --------------')
+                vmix.sendTlCmdToVmix({ content: content})
             }
         )
 
