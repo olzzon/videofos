@@ -2,7 +2,7 @@
 import osc from 'osc'
 import { logger } from './utils/logger'
 
-import { VMix } from './devices/vmixAPI'
+import { VMix } from './devices/vmix'
 
 export const OscConnection = (port: number) => {
     const vmix = new VMix()
@@ -23,9 +23,9 @@ export const OscConnection = (port: number) => {
         .on(
             'message',
             (message: any, timetag: number | undefined, info: any) => {
-                let content = JSON.parse(message.args[0])
+                let tlObjCmd = JSON.parse(message.args[0])
                 console.log('---------------Message : --------------')
-                vmix.sendTlCmdToVmix({ content: content})
+                vmix.sendTlCmdToVmix({ content: tlObjCmd.content}, tlObjCmd.layer)
             }
         )
 
