@@ -121,7 +121,7 @@ export class VMix {
         setTimeout(() => {
             this.sendCommandFunction('PreviewInput', { input: this._currentPvwSource})
             console.log(`Set next - source: ${this._currentPvwSource} in Pvw after transistion`)
-        }, 200)
+        }, atemObjAux.content.me.transition*25)
         console.log(
             'PGM Atem Input : ',
             atemObjAux.content.me.input,
